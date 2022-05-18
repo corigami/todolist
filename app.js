@@ -52,7 +52,6 @@ function response(req, res) {
             res.redirect("/");
         } else {
             currentTasks = data;
-            console.log(currentTasks);
             res.render('list', { day_of_wk: day_of_wk, listTitle: "Today", tasks: currentTasks });
         }
     });
@@ -70,14 +69,14 @@ function post_root(req, res) {
 
 //handle item deletions
 function post_delete(req, res) {
-    Task.deleteOne({_id:req.body.checkbox}, function(err){
+    Task.findByIdAndRemove(req.body.checkbox, function(err){
         if(err){
             console.log(err);
         }else{
             console.log("Deleted item: " + req.body.checkbox);
+            res.redirect("/");
         }
     })
-    res.redirect("/");
 }
 
 function addDefaultTask(){
