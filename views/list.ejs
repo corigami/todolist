@@ -9,18 +9,19 @@
             </h1>
         </div>
         <div class="box">
-            <% for(var i=0; i < tasks.length; i++){ %>
-                <div class="item">
-                    <input type="checkbox">
-                    <p>
-                        <%=tasks[i].name%>
-                    </p>
-                </div>
-                <% } %>
+            <% tasks.forEach(function(task){ %>
+                <form action="/delete" method="post">
+                    <div class="item">
+                        <input type="checkbox" name="checkbox" value="<%=task._id%>" onchange="this.form.submit()">
+                        <p><%=task.name%></p>
+                    </div>
+                </form>
+                <% }); %>
                     <form class="item" action="/" method="post">
                         <input type="text" name="item" placeholder="New" autocomplete="off">
                         <button type="submit" name="button">+</button>
                     </form>
         </div>
     </body>
+
 <%- include('footer') -%>

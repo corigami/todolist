@@ -23,28 +23,6 @@ const taskSchema = new mongoose.Schema({
 const Task = mongoose.model("Task", taskSchema);
 var currentTasks = [];
 
-//create default if collection empty or does not exists
-Task.find({}, function(err, data){
-    if (data.length == 0){
-        const defaultTask = new Task({
-            name: "Update tasks"
-        });
-        currentTasks.push(defaultTask);
-        
-        Task.insertMany(currentTasks, function(err){
-            if(err){
-                console.log(err);
-            }else{
-                console.log("Created default item");
-            }
-        });
-    }else{
-        currentTasks = data
-        console.log("Tasks exists, skipping default task creation.")
-    }
-});
-
-
 /* --------------Server Logic --------*/
 
 //Start server listing on port
@@ -53,7 +31,8 @@ app.listen(PORT, function () {
 });
 
 app.get("/", response);
-app.post("/", post_action);
+app.post("/", post_root);
+app.post("/delete", post_delete);
 app.get("/about", function (req, res) {
     res.render("about");
 });
@@ -67,14 +46,50 @@ function response(req, res) {
     };
     var day_of_wk = new Date().toLocaleDateString("en-US", date_opts);
 
-    //renders list.ejs in views dir.  2nd arguement is list object
-    res.render('list', { day_of_wk: day_of_wk, listTitle: "Today", tasks: currentTasks });
+    Task.find({}, function (err, data) {
+        if (data.length == 0) {
+            currentTasks = addDefaultTask();
+            res.redirect("/");
+        } else {
+            currentTasks = data;
+            console.log(currentTasks);
+            res.render('list', { day_of_wk: day_of_wk, listTitle: "Today", tasks: currentTasks });
+        }
+    });
 }
 
 //Post function for root dir
-function post_action(req, res) {
+function post_root(req, res) {
     let new_item = req.body.item;
-    new_items.push(new_item);
-    console.log(new_item);
+    const task = new Task({
+        name: new_item
+    });
+    task.save();
     res.redirect("/");
+}
+
+//handle item deletions
+function post_delete(req, res) {
+    Task.deleteOne({_id:req.body.checkbox}, function(err){
+        if(err){
+            console.log(err);
+        }else{
+            console.log("Deleted item: " + req.body.checkbox + );
+        }
+    })
+    res.redirect("/");
+}
+
+function addDefaultTask(){
+    const defaultTask = new Task({
+        name: "Update tasks"
+    });
+
+    Task.insertMany(defaultTask, function (err) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log("Created default item");
+        }
+    });
 }
