@@ -5,15 +5,15 @@
 
         <div id="heading" class="box">
             <h1 style="color:green">
-                <%=day_of_wk%>'s Todo List
+                <%=day_of_wk%>'s <br>Todo List
             </h1>
         </div>
         <div class="box">
-            <% for(var i=0; i < new_items.length; i++){ %>
+            <% for(var i=0; i < tasks.length; i++){ %>
                 <div class="item">
                     <input type="checkbox">
                     <p>
-                        <%=new_items[i]%>
+                        <%=tasks[i].name%>
                     </p>
                 </div>
                 <% } %>
