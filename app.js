@@ -74,7 +74,7 @@ function post_delete(req, res) {
         if(err){
             console.log(err);
         }else{
-            console.log("Deleted item: " + req.body.checkbox + );
+            console.log("Deleted item: " + req.body.checkbox);
         }
     })
     res.redirect("/");
