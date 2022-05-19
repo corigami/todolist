@@ -104,7 +104,7 @@ app.post("/delete", function (req, res) {
                 console.log(err);
             }
         });
-    } else {                                                //delete from custom list and redirect to custome page
+    } else {                                                //delete from custom list and redirect to custom page
         List.findOneAndUpdate(
             { name: listName },                             //Condition to find
             { $pull: { tasks: { _id: itemId } } },          //MongoDb $pull function
