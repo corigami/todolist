@@ -1,12 +1,11 @@
 <%- include('header') -%>
 
     <body>
-
-
         <div id="heading" class="box">
             <h1 style="color:green">
-                <%=day_of_wk%>'s <br>Todo List
+                <%=date%>
             </h1>
+            <h2><%=title%>'s Todo List</h2>
         </div>
         <div class="box">
             <% tasks.forEach(function(task){ %>
@@ -15,13 +14,14 @@
                         <input type="checkbox" name="checkbox" value="<%=task._id%>" onchange="this.form.submit()">
                         <p><%=task.name%></p>
                     </div>
+                    <input type="hidden" name="listName" value="<%= title%>"></input>
                 </form>
                 <% }); %>
                     <form class="item" action="/" method="post">
                         <input type="text" name="item" placeholder="New" autocomplete="off">
-                        <button type="submit" name="button">+</button>
+                        <button type="submit" name="list" value="<%= title %>">+</button>
                     </form>
-        </div>
+        </div> 
     </body>
 
 <%- include('footer') -%>
